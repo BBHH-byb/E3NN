@@ -1,0 +1,11 @@
+# directory§
+csv_input/
+
+# dataset
+*.csv
+*.pkl
+*.zip
+
+# python cache
+__pycache__/
+*.pyc
