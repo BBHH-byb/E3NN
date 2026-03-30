@@ -105,9 +105,10 @@ def load_pc_vector(pc_path):
     array = np.asarray(matrix, dtype=float)
 
     if array.ndim == 0:
-        return np.array([float(array)], dtype=float)
+        raise ValueError("PC file contains a scalar value")
+        #return np.array([float(array)], dtype=float)
     if array.ndim == 1:
-        return array[:1]
+        return array
     return array[:, 0]
 
 
@@ -187,6 +188,8 @@ def parse_master_list_line(raw_line, line_number):
         return None
 
     pdbid, chain, _, length = parts[:4]
+    if len(chain) != 1:
+        return None
     try:
         nresid = int(length)
     except ValueError:
@@ -225,14 +228,11 @@ def build_dataset():
 def write_outputs(dataset):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    csv_path = OUTPUT_DIR / "input_dataset.csv"
-    pkl_path = OUTPUT_DIR / "input_dataset.pkl"
+    csv_path = OUTPUT_DIR / "input_monomer_dataset.csv"
 
     dataset.to_csv(csv_path, index=False)
-    dataset.to_pickle(pkl_path)
 
     print(f"Saved {len(dataset)} rows to {csv_path}")
-    print(f"Saved {len(dataset)} rows to {pkl_path}")
 
 
 def main():
